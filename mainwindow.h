@@ -31,6 +31,10 @@ private slots:
 
     void on_horizontalSlider_sliderMoved(int position);
 
+    ///Called whenever the application's focus widget changes -
+    ///used to give focus back to the renderer when a button/slider steals it
+    void onApplicationFocusChanged(QWidget *old, QWidget *now);
+
 private:
     ///called from the constructor. Initializes different parts of the program.
     void init();

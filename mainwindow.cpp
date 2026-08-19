@@ -3,6 +3,7 @@
 
 #include <QSurfaceFormat>
 #include <QDebug>
+#include <QApplication>
 
 #include "renderer.h"
 #include "logger.h"
@@ -77,8 +78,28 @@ void MainWindow::init()
     // - can be deleted, but then you have to click inside the renderwindow to get the focus
     mRenderWindowContainer->setFocus();
 
+    //Whenever any widget in the app gains focus, check if we should give it
+    //back to the renderer instead (e.g. after clicking a button or slider)
+    connect(qApp, &QApplication::focusChanged, this, &MainWindow::onApplicationFocusChanged);
+
     //feed in MainWindow to the logger - has to be done, else logger will crash program
     Logger::getInstance()->setMainWindow(this);;
+}
+
+void MainWindow::onApplicationFocusChanged(QWidget *old, QWidget *now)
+{
+    Q_UNUSED(old);
+
+    //If focus moved to one of our control widgets (buttons/slider),
+    //give it right back to the renderer so keyboard input keeps working.
+    if (now == ui->movementButton ||
+        now == ui->wireframeButton ||
+        now == ui->backfaceButton ||
+        now == ui->horizontalSlider)
+    {
+        mRenderWindowContainer->setFocus();
+        mRenderWindow->requestActivate();
+    }
 }
 
 //Example of a slot called from the button on the top of the program.
