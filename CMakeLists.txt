@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.21)
 
-project(3D-programmering
+project(OpenGL_Qt6
     VERSION 1.0
     LANGUAGES CXX
 )
